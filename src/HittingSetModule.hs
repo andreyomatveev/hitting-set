@@ -12,7 +12,7 @@
 --                                      lexicographically minimal blocking set 
 --                                          of minimum cardinality. 
 -- 
--- Integer-linear-programming-free.
+-- Integer-Linear-Programming-free.
 -- 
 -- Working with subsets of a finite set and with their orderings, we use the techniques presented in Section 2.3 
 -- of the classical monograph D.L. Kreher, D.R. Stinson, Combinatorial Algorithms: Generation, 
