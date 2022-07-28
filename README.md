@@ -3,9 +3,9 @@
 A Haskell `HittingSetModule.hs` module exporting a function that solves a variant of the *HittingSet* problem: The function takes a moderate-size family 
 of moderate-size sets of integers, and it slowly returns the corresponding *lexicographically minimal* blocking set of *minimum cardinality*. 
 
-In the spirit of Theorem 9.12(ii) and Example 9.13 from the monograph [A.O. Matveev, Symmetric Cycles](https://www.jennystanford.com/), Jenny Stanford Publishing, 2023.
-
 Integer-Linear-Programming-free.
+
+In the spirit of Theorem 9.12(ii) and Example 9.13 from the monograph [A.O. Matveev, Symmetric Cycles](https://www.jennystanford.com/), Jenny Stanford Publishing, 2023.
 
 ## Blocking Sets ##
 
