@@ -36,11 +36,7 @@ import qualified Data.IntMap.Strict                as DIMS
 import qualified Data.IntSet                       as ISt
 import           Data.List                         (elemIndex, length)
 import qualified Data.Set                          as St
-
 import           Data.Bit                          (Bit (..))
-
-import qualified Data.Vector.Unboxed.Mutable       as VUM
-
 import           Data.Maybe                        (fromMaybe, isNothing)
 import           Math.Combinatorics.Exact.Binomial (choose)
 
