@@ -9,7 +9,7 @@ In the spirit of Theorem 9.12(ii) and Example 9.13 from the monograph [A.O. Matv
 
 ## Blocking Sets ##
 
-Let $\mathcal{A} := \langle A_1, A_2, ..., A_k\rangle$ be a finite nonempty family of nonempty subsets of a finite set of integers $E$.
+Let $\mathcal{A} := \langle A_1, A_2, ..., A_k\rangle$ be a nonempty family of nonempty subsets of a finite set $E$.
 A subset $B$ of the set $E$ is called a *blocking set* (or *hitting set*, *transversal*, *vertex cover* (or *node cover*), 
 *system of representatives*) of the family $\mathcal{A}$ if and only if the set $B$ has a nonempty
 intersection with each set $A_i$ from the family $\mathcal{A}$.
