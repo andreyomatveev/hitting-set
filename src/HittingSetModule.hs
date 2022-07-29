@@ -155,11 +155,11 @@ componentFunctionOfIntSet ::
   -> DIMS.IntMap Bit
   -> Bool
   -> (DIMS.IntMap Bit, Bool)
-componentFunctionOfIntSet sizeOfVertexSet remainingIntegerSubset currentIndex componentsAlreadyCalculated returnTrue
+componentFunctionOfIntSet sizeOfVertexSet remainingIntSubset currentIndex componentsAlreadyCalculated returnTrue
   | returnTrue = (componentsAlreadyCalculated, True)
-  | remainingIntegerSubset == ISt.empty = (componentsAlreadyCalculated, False)
+  | remainingIntSubset == ISt.empty = (componentsAlreadyCalculated, False)
   | otherwise = do
-    let minElement = ISt.findMin remainingIntegerSubset
+    let minElement = ISt.findMin remainingIntSubset
     let found = DIMS.lookup minElement componentsAlreadyCalculated
     if isNothing found
       then do
@@ -173,26 +173,26 @@ componentFunctionOfIntSet sizeOfVertexSet remainingIntegerSubset currentIndex co
         if not neo
           then componentFunctionOfIntSet
                  sizeOfVertexSet
-                 remainingIntegerSubset -- we do not make remainingIntegerSubset smaller because we are going to stop right now
+                 remainingIntSubset -- we do not make remainingIntSubset smaller because we are going to stop right now
                  currentIndex
                  componentsUpdated
                  True
           else componentFunctionOfIntSet
                  sizeOfVertexSet
-                 (ISt.deleteMin remainingIntegerSubset)
+                 (ISt.deleteMin remainingIntSubset)
                  currentIndex
                  componentsUpdated
                  False
       else if not (unBit (fromMaybe 0 found))
              then componentFunctionOfIntSet
                     sizeOfVertexSet
-                    remainingIntegerSubset -- we do not make remainingIntegerSubset smaller because we are going to stop right now
+                    remainingIntSubset -- we do not make remainingIntSubset smaller because we are going to stop right now
                     currentIndex
                     componentsAlreadyCalculated
                     True
              else componentFunctionOfIntSet
                     sizeOfVertexSet
-                    (ISt.deleteMin remainingIntegerSubset)
+                    (ISt.deleteMin remainingIntSubset)
                     currentIndex
                     componentsAlreadyCalculated
                     False
