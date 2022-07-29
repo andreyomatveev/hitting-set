@@ -1,6 +1,6 @@
 # HittingSetModule.hs #
 
-A Haskell `HittingSetModule.hs` module exporting a function that solves a variant of the *HittingSet* problem: The function takes a moderate-size family 
+A Haskell `HittingSetModule.hs` module exporting a function that solves the basic variant of the *HittingSet* problem: The function takes a moderate-size family 
 of moderate-size sets of integers, and it slowly returns the corresponding *lexicographically minimal* blocking set of *minimum cardinality*. 
 
 Integer-Linear-Programming-free.
