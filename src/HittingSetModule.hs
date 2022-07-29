@@ -26,8 +26,6 @@
 -- Kruchinin, V., Shablya, Y., Kruchinin, D., Rulevskiy V., Unranking small combinations of a large Set 
 -- in co-lexicographic order. Algorithms, 2022, 15, 36.
 
--- {-# LANGUAGE MultiWayIf #-}
-
 module HittingSetModule
   ( findLexicographicallyMinimalBlockingSetOfMinimumCardinality
   ) where
