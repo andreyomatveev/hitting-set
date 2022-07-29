@@ -46,9 +46,9 @@ import           Math.Combinatorics.Exact.Binomial (choose)
 
 findLexicographicallyMinimalBlockingSetOfMinimumCardinality :: St.Set ISt.IntSet -> ISt.IntSet
 -- Call for instance
---    ghci> findLexicographicallyMinimalBlockingSetOfMinimumCardinality ( St.fromList [ ISt.fromList [-3,0], ISt.fromList [6,3], ISt.fromList [3,-2,0] ] )
+--    ghci> findLexicographicallyMinimalBlockingSetOfMinimumCardinality ( St.fromList [ ISt.fromList [-3,1], ISt.fromList [6,1], ISt.fromList [3,-2,0] ] )
 -- to get the result:
---    fromList [-3,3]
+--    fromList [-2,1]
 --
 -- Call 
 --    ghci> :{
