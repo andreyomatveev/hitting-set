@@ -26,7 +26,7 @@
 -- Kruchinin, V., Shablya, Y., Kruchinin, D., Rulevskiy V., Unranking small combinations of a large Set 
 -- in co-lexicographic order. Algorithms, 2022, 15, 36.
 
-{-# LANGUAGE MultiWayIf #-}
+-- {-# LANGUAGE MultiWayIf #-}
 
 module HittingSetModule
   ( findLexicographicallyMinimalBlockingSetOfMinimumCardinality
@@ -102,7 +102,7 @@ findLexicographicallyMinimalBlockingSetOfMinimumCardinality family
                             findTheIndex sizeOfVertexSet familyRenamed 1)
                    ISt.map (\e -> vertices !! (e - 1)) hSRenamed
 
-findTheIndex :: Int -> St.Set ISt.IntSet -> Int -> Int
+findTheIndex :: Int -> St.Set ISt.IntSet -> Integer -> Integer
 findTheIndex sizeOfVertexSet family currentIndex = do
   let componentsAlreadyCalculated = DIMS.empty
   if snd
@@ -118,7 +118,7 @@ findTheIndex sizeOfVertexSet family currentIndex = do
 componentFunctionOfFamily ::
      Int
   -> St.Set ISt.IntSet
-  -> Int
+  -> Integer
   -> DIMS.IntMap Bit
   -> Bool
   -> (DIMS.IntMap Bit, Bool)
@@ -151,15 +151,15 @@ componentFunctionOfFamily sizeOfVertexSet remainingSubfamily currentIndex compon
 componentFunctionOfIntSet ::
      Int
   -> ISt.IntSet
-  -> Int
+  -> Integer
   -> DIMS.IntMap Bit
   -> Bool
   -> (DIMS.IntMap Bit, Bool)
-componentFunctionOfIntSet sizeOfVertexSet remainingIntSubset currentIndex componentsAlreadyCalculated returnTrue
+componentFunctionOfIntSet sizeOfVertexSet remainingIntegerSubset currentIndex componentsAlreadyCalculated returnTrue
   | returnTrue = (componentsAlreadyCalculated, True)
-  | remainingIntSubset == ISt.empty = (componentsAlreadyCalculated, False)
+  | remainingIntegerSubset == ISt.empty = (componentsAlreadyCalculated, False)
   | otherwise = do
-    let minElement = ISt.findMin remainingIntSubset
+    let minElement = ISt.findMin remainingIntegerSubset
     let found = DIMS.lookup minElement componentsAlreadyCalculated
     if isNothing found
       then do
@@ -173,37 +173,37 @@ componentFunctionOfIntSet sizeOfVertexSet remainingIntSubset currentIndex compon
         if not neo
           then componentFunctionOfIntSet
                  sizeOfVertexSet
-                 remainingIntSubset -- we do not make remainingIntSubset smaller because we are going to stop right now
+                 remainingIntegerSubset -- we do not make remainingIntegerSubset smaller because we are going to stop right now
                  currentIndex
                  componentsUpdated
                  True
           else componentFunctionOfIntSet
                  sizeOfVertexSet
-                 (ISt.deleteMin remainingIntSubset)
+                 (ISt.deleteMin remainingIntegerSubset)
                  currentIndex
                  componentsUpdated
                  False
       else if not (unBit (fromMaybe 0 found))
              then componentFunctionOfIntSet
                     sizeOfVertexSet
-                    remainingIntSubset -- we do not make remainingIntSubset smaller because we are going to stop right now
+                    remainingIntegerSubset -- we do not make remainingIntegerSubset smaller because we are going to stop right now
                     currentIndex
                     componentsAlreadyCalculated
                     True
              else componentFunctionOfIntSet
                     sizeOfVertexSet
-                    (ISt.deleteMin remainingIntSubset)
+                    (ISt.deleteMin remainingIntegerSubset)
                     currentIndex
                     componentsAlreadyCalculated
                     False
 
 componentFunctionOfReversedCharVectorOfPrincipalIncreasingFamily ::
-     Int -> Int -> Int -> Bool
+     Int -> Int -> Integer -> Bool
 componentFunctionOfReversedCharVectorOfPrincipalIncreasingFamily sizeOfVertexSet elementOfVertexSet indexForReversedCharVector =
   elementOfVertexSet `ISt.member`
   unRankLex sizeOfVertexSet indexForReversedCharVector
 
-unRankLex :: Int -> Int -> ISt.IntSet
+unRankLex :: Int -> Integer -> ISt.IntSet
 unRankLex sizeOfVertexSet indexForReversedCharVector = do
   if indexForReversedCharVector == 1
     then ISt.fromList [1 .. sizeOfVertexSet]
@@ -217,22 +217,22 @@ unRankLex sizeOfVertexSet indexForReversedCharVector = do
            (fst (fst layerAndRankInLayer))
            sizeOfVertexSet)
 
-findLayerAndRankInLayer :: Int -> Int -> ((Int, Int), Int)
+findLayerAndRankInLayer :: Int -> Integer -> ((Int, Integer), Integer)
 findLayerAndRankInLayer sizeOfVertexSet indexForReversedCharVector =
   layerAndRankInLayerProcedure
     sizeOfVertexSet
     indexForReversedCharVector
     sizeOfVertexSet
-    1
-    1
+    (1 :: Integer)
+    (1 :: Integer)
 
 layerAndRankInLayerProcedure ::
-     Int -> Int -> Int -> Int -> Int -> ((Int, Int), Int)
+     Int -> Integer -> Int -> Integer -> Integer -> ((Int, Integer), Integer)
 layerAndRankInLayerProcedure sizeOfVertexSet indexForReversedCharVector currentL currentShift binomialCoeff
   | indexForReversedCharVector <= currentShift =
     ((currentL, currentShift - indexForReversedCharVector), binomialCoeff)
   | otherwise = do
-    let binomialCoeff = choose sizeOfVertexSet (currentL - 1)
+    let binomialCoeff = choose (toInteger sizeOfVertexSet) (toInteger currentL - 1)
     layerAndRankInLayerProcedure
       sizeOfVertexSet
       indexForReversedCharVector
@@ -240,12 +240,12 @@ layerAndRankInLayerProcedure sizeOfVertexSet indexForReversedCharVector currentL
       (currentShift + binomialCoeff)
       binomialCoeff
 
-subsetColexUnrank :: Int -> Int -> Int -> ISt.IntSet
+subsetColexUnrank :: Integer -> Int -> Int -> ISt.IntSet
 subsetColexUnrank rankInLayer layer sizeOfVertexSet =
   subsetColexUnrankProcedure rankInLayer sizeOfVertexSet layer 1 ISt.empty
 
 subsetColexUnrankProcedure ::
-     Int -> Int -> Int -> Int -> ISt.IntSet -> ISt.IntSet
+     Integer -> Int -> Int -> Int -> ISt.IntSet -> ISt.IntSet
 subsetColexUnrankProcedure r x k step currentIntSet
   | step > k = currentIntSet
   | otherwise = do
@@ -257,9 +257,9 @@ subsetColexUnrankProcedure r x k step currentIntSet
       (step + 1)
       (ISt.insert (fst cXbC + 1) currentIntSet)
 
-decreaseX :: Int -> Int -> Int -> Int -> (Int, Int)
+decreaseX :: Integer -> Int -> Int -> Int -> (Int, Integer)
 decreaseX r x k i = do
-  let binomialCoeff = choose x (k + 1 - i)
+  let binomialCoeff = choose (toInteger x) (toInteger k + 1 - toInteger i)
   if binomialCoeff <= r
     then (x, binomialCoeff)
     else decreaseX r (x - 1) k i
