@@ -3,57 +3,58 @@
 -- Jenny Stanford Publishing, 2023, https://www.jennystanford.com/ .
 --
 -- Let AA := {A_1, A_2, ..., A_k} be a nonempty family of nonempty subsets of a finite set of integers E.
--- A subset B of the set E is called a blocking set [or hitting set, transversal, vertex cover (or node cover), 
+-- A subset B of the set E is called a blocking set [or hitting set, transversal, vertex cover (or node cover),
 -- system of representatives] of the family AA if and only if the set B has a nonempty
 -- intersection with each set A_i from the family AA.
 --
--- The findLexicographicallyMinimalBlockingSetOfMinimumCardinality function takes a moderate-size family of moderate-size sets of integers, and 
--- it slowly returns the corresponding 
---                                      lexicographically minimal blocking set 
---                                          of minimum cardinality. 
--- 
+-- The findLexicographicallyMinimalBlockingSetOfMinimumCardinality function takes a moderate-size family of moderate-size sets of integers, and
+-- it slowly returns the corresponding
+--                                      lexicographically minimal blocking set
+--                                          of minimum cardinality.
+--
 -- Integer-Linear-Programming-free.
--- 
--- Working with subsets of a finite set and with their orderings, we use the techniques presented in Section 2.3 
--- of the classical monograph D.L. Kreher, D.R. Stinson, Combinatorial Algorithms: Generation, 
+--
+-- Working with subsets of a finite set and with their orderings, we use the techniques presented in Section 2.3
+-- of the classical monograph D.L. Kreher, D.R. Stinson, Combinatorial Algorithms: Generation,
 -- Enumeration and Search, CRC Press series on discrete mathematics and its applications. Boca Raton, FL: CRC Press, 1999.
 --
 -- On the-state-of-the art, and on advanced topics, see, e.g., the works:
 --
--- van Bevern R., Smirnov P.V. Optimal-size problem kernels for d-Hitting Set in linear time and space. Information 
+-- van Bevern R., Smirnov P.V. Optimal-size problem kernels for d-Hitting Set in linear time and space. Information
 -- Processing Letters, 2020, 163, and
 --
--- Kruchinin, V., Shablya, Y., Kruchinin, D., Rulevskiy V., Unranking small combinations of a large Set 
+-- Kruchinin, V., Shablya, Y., Kruchinin, D., Rulevskiy V., Unranking small combinations of a large Set
 -- in co-lexicographic order. Algorithms, 2022, 15, 36.
 
 module HittingSetModule
   ( findLexicographicallyMinimalBlockingSetOfMinimumCardinality
   ) where
 
+import           Data.Bit                          (Bit (..))
 import qualified Data.IntMap.Strict                as DIMS
 import qualified Data.IntSet                       as ISt
 import           Data.List                         (elemIndex, length)
-import qualified Data.Set                          as St
-import           Data.Bit                          (Bit (..))
 import           Data.Maybe                        (fromMaybe, isNothing)
+import qualified Data.Set                          as St
 import           Math.Combinatorics.Exact.Binomial (choose)
 
-findLexicographicallyMinimalBlockingSetOfMinimumCardinality :: St.Set ISt.IntSet -> ISt.IntSet
+findLexicographicallyMinimalBlockingSetOfMinimumCardinality ::
+     St.Set ISt.IntSet -> ISt.IntSet
 -- Call for instance
 --    ghci> findLexicographicallyMinimalBlockingSetOfMinimumCardinality ( St.fromList [ ISt.fromList [-3,1], ISt.fromList [6,1], ISt.fromList [3,-2,0] ] )
 -- to get the result:
 --    fromList [-2,1]
 --
--- Call 
+-- Call
 --    ghci> :{
---          findLexicographicallyMinimalBlockingSetOfMinimumCardinality 
---          (St.fromList 
+--          findLexicographicallyMinimalBlockingSetOfMinimumCardinality
+--          (St.fromList
 --          [
 --          ISt.fromList [-1,7,2,4,6,0,11,-12,15],
 --          ISt.fromList [2,3,5,9,12,-14,17,-25,56],
---          ISt.fromList [33,46,-10],  
---          ISt.fromList [5,8,14,4,6,11,17,15] 
---          ] 
+--          ISt.fromList [33,46,-10],
+--          ISt.fromList [5,8,14,4,6,11,17,15]
+--          ]
 --          )
 --          :}
 -- to get the sesult:
@@ -89,11 +90,16 @@ findLexicographicallyMinimalBlockingSetOfMinimumCardinality family
                                  fromMaybe 0 (Data.List.elemIndex e vertices) +
                                  1))
                            family
-                   let hSRenamed =
+                   let complementOfSolution =
                          unRankLex
                            sizeOfVertexSet
-                           (1 + (2 ^ sizeOfVertexSet) -
-                            findTheIndex sizeOfVertexSet familyRenamed 1)
+                           (findTheIndex sizeOfVertexSet familyRenamed 1)
+                   let hSRenamed =
+                         ISt.fromList
+                           [ e
+                           | e <- [1 .. sizeOfVertexSet]
+                           , e `ISt.notMember` complementOfSolution
+                           ]
                    ISt.map (\e -> vertices !! (e - 1)) hSRenamed
 
 findTheIndex :: Int -> St.Set ISt.IntSet -> Integer -> Integer
@@ -226,7 +232,8 @@ layerAndRankInLayerProcedure sizeOfVertexSet indexForReversedCharVector currentL
   | indexForReversedCharVector <= currentShift =
     ((currentL, currentShift - indexForReversedCharVector), binomialCoeff)
   | otherwise = do
-    let binomialCoeff = choose (toInteger sizeOfVertexSet) (toInteger currentL - 1)
+    let binomialCoeff =
+          choose (toInteger sizeOfVertexSet) (toInteger currentL - 1)
     layerAndRankInLayerProcedure
       sizeOfVertexSet
       indexForReversedCharVector
