@@ -96,10 +96,9 @@ findLexicographicallyMinimalBlockingSetOfMinimumCardinality family
                            (findTheIndex sizeOfVertexSet familyRenamed 1)
                    let hSRenamed =
                          ISt.fromList
-                           [ e
-                           | e <- [1 .. sizeOfVertexSet]
-                           , e `ISt.notMember` complementOfSolution
-                           ]
+                           (filter
+                              (`ISt.notMember` complementOfSolution)
+                              [1 .. sizeOfVertexSet])
                    ISt.map (\e -> vertices !! (e - 1)) hSRenamed
 
 findTheIndex :: Int -> St.Set ISt.IntSet -> Integer -> Integer
