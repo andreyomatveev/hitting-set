@@ -12,8 +12,6 @@
 --                                      lexicographically minimal blocking set
 --                                          of minimum cardinality.
 --
--- Integer-Linear-Programming-free.
---
 -- Working with subsets of a finite set and with their orderings, we use the techniques presented in Section 2.3
 -- of the classical monograph D.L. Kreher, D.R. Stinson, Combinatorial Algorithms: Generation,
 -- Enumeration and Search, CRC Press series on discrete mathematics and its applications. Boca Raton, FL: CRC Press, 1999.
