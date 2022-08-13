@@ -160,13 +160,14 @@ componentFunctionOfIntSet sizeOfVertexSet remainingIntSubset currentIndex compon
     let found = DIMS.lookup minElement componentsAlreadyCalculated
     if isNothing found
       then do
-        let neo =
+        let (neo, unrankedIntSubset) =
               componentFunctionOfReversedCharVectorOfPrincipalIncreasingFamily
                 sizeOfVertexSet
                 minElement
                 currentIndex
         let componentsUpdated =
-              DIMS.insert minElement (Bit neo) componentsAlreadyCalculated
+              DIMS.fromList [ (e, Bit (e `ISt.member` unrankedIntSubset)) | e <- [1 .. sizeOfVertexSet] ]
+
         if not neo
           then componentFunctionOfIntSet
                  sizeOfVertexSet
@@ -195,10 +196,12 @@ componentFunctionOfIntSet sizeOfVertexSet remainingIntSubset currentIndex compon
                     False
 
 componentFunctionOfReversedCharVectorOfPrincipalIncreasingFamily ::
-     Int -> Int -> Integer -> Bool
+     Int -> Int -> Integer -> (Bool, ISt.IntSet)
 componentFunctionOfReversedCharVectorOfPrincipalIncreasingFamily sizeOfVertexSet elementOfVertexSet indexForReversedCharVector =
-  elementOfVertexSet `ISt.member`
-  unRankLex sizeOfVertexSet indexForReversedCharVector
+  do
+    let unrankedIntSubset = unRankLex sizeOfVertexSet indexForReversedCharVector
+    (elementOfVertexSet `ISt.member` unrankedIntSubset, unrankedIntSubset)
+
 
 unRankLex :: Int -> Integer -> ISt.IntSet
 unRankLex sizeOfVertexSet indexForReversedCharVector = do
