@@ -131,19 +131,17 @@ componentFunctionOfFamily sizeOfVertexSet remainingSubfamily currentIndex compon
             currentIndex
             componentsAlreadyCalculated
             False
-    if not (snd componentPlus)
-      then componentFunctionOfFamily
-             sizeOfVertexSet
-             remainingSubfamily -- we do not make remainingSubfamily smaller because we are going to stop right now
-             currentIndex
-             componentsAlreadyCalculated
-             True
-      else componentFunctionOfFamily
-             sizeOfVertexSet
-             (St.deleteAt 0 remainingSubfamily)
-             currentIndex
-             (fst componentPlus)
-             False
+    let nsc = not (snd componentPlus)
+    componentFunctionOfFamily
+      sizeOfVertexSet
+      (if nsc
+         then remainingSubfamily -- we do not make remainingSubfamily smaller because we are going to stop right now
+         else St.deleteAt 0 remainingSubfamily)
+      currentIndex
+      (if nsc
+         then componentsAlreadyCalculated
+         else fst componentPlus)
+      nsc
 
 componentFunctionOfIntSet ::
      Int
@@ -170,32 +168,25 @@ componentFunctionOfIntSet sizeOfVertexSet remainingIntSubset currentIndex compon
                 [ (e, Bit (e `ISt.member` unrankedIntSubset))
                 | e <- [1 .. sizeOfVertexSet]
                 ]
-        if not neo
-          then componentFunctionOfIntSet
-                 sizeOfVertexSet
-                 remainingIntSubset -- we do not make remainingIntSubset smaller because we are going to stop right now
-                 currentIndex
-                 componentsUpdated
-                 True
-          else componentFunctionOfIntSet
-                 sizeOfVertexSet
-                 (ISt.deleteMin remainingIntSubset)
-                 currentIndex
-                 componentsUpdated
-                 False
-      else if not (unBit (fromMaybe 0 found))
-             then componentFunctionOfIntSet
-                    sizeOfVertexSet
-                    remainingIntSubset -- we do not make remainingIntSubset smaller because we are going to stop right now
-                    currentIndex
-                    componentsAlreadyCalculated
-                    True
-             else componentFunctionOfIntSet
-                    sizeOfVertexSet
-                    (ISt.deleteMin remainingIntSubset)
-                    currentIndex
-                    componentsAlreadyCalculated
-                    False
+        let nn = not neo
+        componentFunctionOfIntSet
+          sizeOfVertexSet
+          (if nn
+             then remainingIntSubset -- we do not make remainingIntSubset smaller because we are going to stop right now
+             else ISt.deleteMin remainingIntSubset)
+          currentIndex
+          componentsUpdated
+          nn
+      else do
+        let nuff = not (unBit (fromMaybe 0 found))
+        componentFunctionOfIntSet
+          sizeOfVertexSet
+          (if nuff
+             then remainingIntSubset -- we do not make remainingIntSubset smaller because we are going to stop right now
+             else ISt.deleteMin remainingIntSubset)
+          currentIndex
+          componentsAlreadyCalculated
+          nuff
 
 componentFunctionOfReversedCharVectorOfPrincipalIncreasingFamily ::
      Int -> Int -> Integer -> (Bool, ISt.IntSet)
