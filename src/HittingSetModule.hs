@@ -64,13 +64,13 @@ findLexicographicallyMinimalBlockingSetOfMinimumCardinality family
   | St.size family == 1 = ISt.singleton (ISt.findMin (St.elemAt 0 family))
   | otherwise = do
     let fst = St.elemAt 0 family
-    let itt = inters (St.delete fst family) fst
+        itt = inters (St.delete fst family) fst
     if ISt.size itt > 0
       then ISt.singleton (ISt.findMin itt)
       else do
         let uni = ISt.unions (St.toList family)
-        let vertices = ISt.toList uni
-        let sizeOfVertexSet = Data.List.length vertices
+            vertices = ISt.toList uni
+            sizeOfVertexSet = Data.List.length vertices
         if sizeOfVertexSet == St.size family
           then uni
           else if disj (St.delete fst family) fst
@@ -88,11 +88,11 @@ findLexicographicallyMinimalBlockingSetOfMinimumCardinality family
                                  fromMaybe 0 (Data.List.elemIndex e vertices) +
                                  1))
                            family
-                   let complementOfSolution =
+                       complementOfSolution =
                          unRankLex
                            sizeOfVertexSet
                            (findTheIndex sizeOfVertexSet familyRenamed 1)
-                   let hSRenamed =
+                       hSRenamed =
                          ISt.fromList
                            (filter
                               (`ISt.notMember` complementOfSolution)
@@ -124,14 +124,14 @@ componentFunctionOfFamily sizeOfVertexSet remainingSubfamily currentIndex compon
   | remainingSubfamily == St.empty = (componentsAlreadyCalculated, True)
   | otherwise = do
     let firstRemainingIntSet = St.elemAt 0 remainingSubfamily
-    let componentPlus =
+        componentPlus =
           componentFunctionOfIntSet
             sizeOfVertexSet
             firstRemainingIntSet
             currentIndex
             componentsAlreadyCalculated
             False
-    let nsc = not (snd componentPlus)
+        nsc = not (snd componentPlus)
     componentFunctionOfFamily
       sizeOfVertexSet
       (if nsc
@@ -155,7 +155,7 @@ componentFunctionOfIntSet sizeOfVertexSet remainingIntSubset currentIndex compon
   | remainingIntSubset == ISt.empty = (componentsAlreadyCalculated, False)
   | otherwise = do
     let minElement = ISt.findMin remainingIntSubset
-    let found = DIMS.lookup minElement componentsAlreadyCalculated
+        found = DIMS.lookup minElement componentsAlreadyCalculated
     if isNothing found
       then do
         let (neo, unrankedIntSubset) =
@@ -163,12 +163,12 @@ componentFunctionOfIntSet sizeOfVertexSet remainingIntSubset currentIndex compon
                 sizeOfVertexSet
                 minElement
                 currentIndex
-        let componentsUpdated =
+            componentsUpdated =
               DIMS.fromList
                 [ (e, Bit (e `ISt.member` unrankedIntSubset))
                 | e <- [1 .. sizeOfVertexSet]
                 ]
-        let nn = not neo
+            nn = not neo
         componentFunctionOfIntSet
           sizeOfVertexSet
           (if nn
@@ -261,7 +261,7 @@ inters subfamily cap
   | St.size subfamily == 0 = cap
   | otherwise = do
     let fst = St.elemAt 0 subfamily
-    let newcap = ISt.intersection fst cap
+        newcap = ISt.intersection fst cap
     inters (St.delete fst subfamily) newcap
 
 disj :: St.Set ISt.IntSet -> ISt.IntSet -> Bool
